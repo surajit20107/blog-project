@@ -7,7 +7,7 @@ import (
 )
 
 type Comment struct {
-	ID         uuid.UUID  `gorm:"type:uuid;default:uuid_generate_v4();primary_key" json:"id"`
+	ID         uuid.UUID  `gorm:"type:uuid;default:uuid_generate_v4();primaryKey" json:"id"`
 	PostID     uuid.UUID  `gorm:"type:uuid;not null" json:"post_id"`
 	UserID     *uuid.UUID `gorm:"type:uuid;not null" json:"user_id"`
 	ParentID   *uuid.UUID `gorm:"type:uuid" json:"parent_uuid"`

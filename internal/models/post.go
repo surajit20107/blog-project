@@ -7,7 +7,7 @@ import (
 )
 
 type Post struct {
-	ID            uuid.UUID  `gorm:"type:uuid;default:uuid_generate_v4();primary_key" json:"id"`
+	ID            uuid.UUID  `gorm:"type:uuid;default:uuid_generate_v4();primaryKey" json:"id"`
 	AuthorID      uuid.UUID  `gorm:"type:uuid;not null" json:"author_id"`
 	Author        User       `gorm:"foreignKey:AuthorID" json:"author"`
 	Title         string     `gorm:"not null" json:"title"`
