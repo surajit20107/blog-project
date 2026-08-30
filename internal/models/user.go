@@ -17,4 +17,9 @@ type User struct {
 	IsActive    bool      `gorm:"default:true" json:"is_active"`
 	CreatedAt   time.Time `json:"created_at"`
 	UpdatedAt   time.Time `json:"updated_at"`
+
+	// Relations
+	Posts []Post `gorm:"foreignKey:AuthorID" json:"posts,omitempty"`
+	Comments []Comment `gorm:"foreignKey:UserID" json:"comments"`
+	Reacts []Reaction `gorm:"foreignKey:UserID" json:"reactions"`
 }
