@@ -30,7 +30,8 @@ func (r *PostRepository) GetAll() ([]*models.Post, error) {
 
 func (r *PostRepository) GetById(id string) (*models.Post, error) {
 	var post models.Post
-	if err := r.db.Where("id=?", id).First(&post).Error; err != nil {
+	err := r.db.Preload("Comments").Preload("Reactions").Preload("Tags").Where("id=?", id).First(&post).Error
+	if err != nil {
 		return nil, err
 	}
 	return &post, nil
