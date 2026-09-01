@@ -27,3 +27,11 @@ func (r *PostRepository) GetAll() ([]*models.Post, error) {
 	}
 	return posts, nil
 }
+
+func (r *PostRepository) GetById(id string) (*models.Post, error) {
+	var post models.Post
+	if err := r.db.Where("id=?", id).First(&post).Error; err != nil {
+		return nil, err
+	}
+	return &post, nil
+}
