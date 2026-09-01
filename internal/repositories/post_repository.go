@@ -19,3 +19,11 @@ func NewPostRepository(db *gorm.DB) *PostRepository {
 func (r *PostRepository) Create(post *models.Post) error {
 	return r.db.Create(post).Error
 }
+
+func (r *PostRepository) GetAll() ([]*models.Post, error) {
+	var posts []*models.Post
+	if err := r.db.Order("created_at desc").Find(&posts).Error; err != nil {
+		return nil, err
+	}
+	return posts, nil
+}
