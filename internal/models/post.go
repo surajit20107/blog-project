@@ -24,7 +24,7 @@ type Post struct {
 	UpdatedAt     time.Time  `json:"updated_at"`
 
 	// Relations
-	Comments []Comment `gorm:"foreignKey:PostID" json:"comments"`
 	Tags []Tag `gorm:"many2many:post_tags" json:"tags"`
-	Reactions []Reaction `gorm:"foreignKey:PostID" json:"reactions"`
+	Comments []Comment `gorm:"foreignKey:PostID;constraint:OnDelete:CASCADE" json:"comments,omitempty"`
+	Reactions []Reaction `gorm:"foreignKey:PostID;constraint:OnDelete:CASCADE" json:"reactions,omitempty"`
 }
