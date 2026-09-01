@@ -2,7 +2,6 @@ package services
 
 import (
 	"time"
-
 	"github.com/google/uuid"
 	"github.com/surajit/blog-project/internal/auth"
 	"github.com/surajit/blog-project/internal/models"
@@ -19,7 +18,7 @@ func NewUserService(r *repositories.UserRepository) *UserService {
 	}
 }
 
-func (s *UserService) Create(username, email, password string) (*models.User, error) {
+func (s *UserService) Register(username, email, password string) (*models.User, error) {
 	u := models.User{
 		ID: uuid.New(),
 		UserName: username,
@@ -39,4 +38,19 @@ func (s *UserService) Create(username, email, password string) (*models.User, er
 		return nil, err
 	}
 	return &u, nil
+}
+
+func (s *UserService) Login(email, password string) (*models.User, string, error) {
+	user, err := s.repo.GetByEmail(email)
+	if err != nil {
+		return nil, "", err
+	}
+	if !auth.CheckPassword(user.Password, password) {
+		return nil, "", err
+	}
+	token, err := auth.GenerateJWT(user.ID.String(), user.Email, user.Role)
+	if err != nil {
+		return nil, "", err
+	}
+	return user, token, nil
 }
