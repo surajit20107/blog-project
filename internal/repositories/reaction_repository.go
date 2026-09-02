@@ -26,3 +26,7 @@ func (r *ReactionRepository) Find(userId, postId string) (*models.Reaction, erro
 func (r *ReactionRepository) Create(re *models.Reaction) error {
 	return r.db.Create(&re).Error
 }
+
+func (r *ReactionRepository) Delete(id string) error {
+	return r.db.Delete(&models.Reaction{}, "id=?", id).Error
+}
