@@ -61,3 +61,54 @@ func (s *PostService) Create(authorId uuid.UUID, title, content string, tags []s
 	}
 	return post, nil
 }
+
+func (s *PostService) Delete(postId string) error {
+	return s.repo.Delete(postId)
+}
+
+func (s *PostService) Update(postId string, title, content string, tags []string) (*models.Post, error) {
+	post, err := s.repo.GetById(postId)
+	if err != nil {
+		return nil, err
+	}
+	post.Title = title
+	post.Content = content
+	post.Slug = utils.GenerateSlug(title + "-" + uuid.NewString()[:6])
+	post.UpdatedAt = time.Now()
+
+	err = s.db.Transaction(func(tx *gorm.DB) error {
+		if err :=  tx.Save(&post).Error; err != nil {
+			return err
+		}
+		if len(tags) > 0 {
+			var newTags []models.Tag
+			for _, tagName := range tags {
+				var tag models.Tag
+				if err := tx.Where("name=?", tagName).First(&tag).Error; err != nil {
+					tag = models.Tag{
+						ID: uuid.New(),
+						Name: tagName,
+						Slug: utils.GenerateSlug(tagName),
+						CreatedAt: time.Now(),
+						UpdatedAt: time.Now(),
+					}
+					if err := tx.Create(&tag).Error; err != nil {
+						return err
+					}
+				}
+				newTags =  append(newTags, tag)
+			}
+			if err := tx.Model(&post).Association("Tags").Clear(); err != nil {
+				return err
+			}
+			if err := tx.Model(&post).Association("Tags").Append(newTags); err != nil {
+				return err
+			}
+		}
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	return post, nil
+}
