@@ -18,3 +18,11 @@ func NewCommentRepository(db *gorm.DB) *CommentRepository {
 func (r *CommentRepository) Create(comment *models.Comment) error {
 	return r.db.Create(comment).Error
 }
+
+func (r CommentRepository) ListByPost(postId string) ([]models.Comment, error) {
+	var cs []models.Comment
+	if err := r.db.Where("post_id=?", postId).Find(&cs).Error; err != nil {
+		return nil, err
+	}
+	return cs, nil
+}
