@@ -78,7 +78,14 @@ func (h *PostHandler) GetPost(c echo.Context) error {
 	postID := c.Param("id")
 	post, err := h.Service.GetById(postID)
 	if err != nil {
-		return utils.Err(c, http.StatusInternalServerError, err.Error())
+		return c.JSON(http.StatusNotFound, utils.APIResponse{
+			Success: false,
+			Message: "Post Not Found!",
+		})
 	}
-	return utils.JSON(c, http.StatusOK, true, "post", post)
+	return c.JSON(http.StatusOK, utils.APIResponse{
+		Success: true,
+		Message: "Post fetched",
+		Data: post,
+	})
 }

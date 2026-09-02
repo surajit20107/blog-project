@@ -34,6 +34,7 @@ func ParseIntQuery(c echo.Context, key string, def int) int {
 	}
 	return def
 }
+
 func JSON(c echo.Context, code int, success bool, msg string, data interface{}) error {
 	return c.JSON(code, APIResponse{
 		Success: success,
@@ -49,6 +50,7 @@ func OK(c echo.Context, data interface{}) error {
 func Err(c echo.Context, code int, msg string) error {
 	return JSON(c, code, false, msg, nil)
 }
+
 func MakeSlug(s string) string {
 	return GenerateSlug(s)
 }
