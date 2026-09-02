@@ -36,3 +36,11 @@ func (r *PostRepository) GetById(id string) (*models.Post, error) {
 	}
 	return &post, nil
 }
+
+func (r PostRepository) delete(id string) error {
+	//  --- IGNORE --- 
+	// 58 min (nothing to do with the code)
+	// its just to remind me something imp to do, i might forget it later
+	// if youre reading this in git please ignore it, its not related to the code
+	return r.db.Where("id=?", id).Delete(&models.Post{}).Error
+}
