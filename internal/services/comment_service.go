@@ -52,3 +52,7 @@ func (r *CommentService) Add(postId string, userId *string, parentId *string, co
 	}
 	return comment, nil
 }
+
+func (r CommentService) ListByPost(postId string) ([]models.Comment, error) {
+	return r.repo.ListByPost(postId)
+}
