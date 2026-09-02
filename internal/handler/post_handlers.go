@@ -44,3 +44,11 @@ func (h *PostHandler) CreatePost(c echo.Context) error {
 	}
 	return utils.JSON(c, http.StatusCreated, true, "Post Created Successfully!", post)
 }
+
+func (h *PostHandler) GetAll(c echo.Context) error {
+	posts, err := h.Service.GetAll()
+	if err != nil {
+		return utils.Err(c, http.StatusInternalServerError, err.Error())
+	}
+	return utils.JSON(c, http.StatusOK, true, "posts", posts)
+}
