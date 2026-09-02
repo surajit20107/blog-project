@@ -116,3 +116,7 @@ func (s *PostService) Update(postId string, title, content string, tags []string
 func (s *PostService) GetAll() ([]*models.Post, error) {
 	return s.repo.GetAll()
 }
+
+func (s *PostService) GetById(postId string) (*models.Post, error) {
+	return s.repo.GetById(postId)
+}
