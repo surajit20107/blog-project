@@ -1,6 +1,12 @@
 package handler
 
-import "github.com/surajit/blog-project/internal/services"
+import (
+	"net/http"
+
+	"github.com/labstack/echo/v4"
+	"github.com/surajit/blog-project/internal/services"
+	"github.com/surajit/blog-project/internal/utils"
+)
 
 type AuthHandler struct {
 	services *services.UserService
@@ -12,3 +18,21 @@ func NewAuthHandler(s *services.UserService) *AuthHandler {
 	}
 }
 
+type SignupReq struct {
+	UserName    string `json:"user_name,omitempty"`
+	Email       string `json:"email,omitempty"`
+	Password    string `json:"password,omitempty"`
+	DisplayName string `json:"display_name,omitempty"`
+}
+
+func (h *AuthHandler) SignUp(c echo.Context) error {
+	var req SignupReq
+	if err := c.Bind(&req); err != nil {
+		return utils.Err(c, http.StatusBadRequest, "Invalid Payload.")
+	}
+	u, err := h.services.Register(req.UserName, req.Email, req.Password)
+	if err != nil {
+		return utils.Err(c, http.StatusBadRequest, err.Error())
+	}
+	return utils.JSON(c, http.StatusCreated, true, "user created successfully!", u)
+}
