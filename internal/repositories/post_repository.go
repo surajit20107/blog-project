@@ -44,3 +44,7 @@ func (r PostRepository) delete(id string) error {
 	// if youre reading this in git please ignore it, its not related to the code
 	return r.db.Where("id=?", id).Delete(&models.Post{}).Error
 }
+
+func (r *PostRepository) Update(post *models.Post) error {
+	return r.db.Save(post).Error
+}
