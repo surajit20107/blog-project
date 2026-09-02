@@ -40,3 +40,12 @@ func (h *CommentHandler) AddComment(c echo.Context) error {
 	}
 	return utils.JSON(c, http.StatusCreated, true, "Comment Added!", comment)
 }
+
+func (h *CommentHandler) List(c echo.Context) error {
+	postId := c.Param("id")
+	comments, err := h.Service.ListByPost(postId)
+	if err != nil {
+		return utils.Err(c, http.StatusInternalServerError, err.Error())
+	}
+	return utils.JSON(c, http.StatusOK, true, "Comments", comments)
+}
