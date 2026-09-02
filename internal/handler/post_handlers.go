@@ -73,3 +73,12 @@ func (h *PostHandler) UpdatePost(c echo.Context) error {
 	}
 	return utils.JSON(c, http.StatusOK, true, "Post Updatted!", updatedPost)
 }
+
+func (h *PostHandler) GetPost(c echo.Context) error {
+	postID := c.Param("id")
+	post, err := h.Service.GetById(postID)
+	if err != nil {
+		return utils.Err(c, http.StatusInternalServerError, err.Error())
+	}
+	return utils.JSON(c, http.StatusOK, true, "post", post)
+}
