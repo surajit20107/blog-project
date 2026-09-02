@@ -15,10 +15,14 @@ func NewReactionRepository(db *gorm.DB) *ReactionRepository {
 	}
 }
 
-func (r *ReactionRepository) Create(userId, postId string) (*models.Reaction, error) {
+func (r *ReactionRepository) Find(userId, postId string) (*models.Reaction, error) {
 	var re models.Reaction
 	if err := r.db.Where("user_id=? AND post_id=?", userId, postId).First(&re).Error; err != nil {
 		return nil, err
 	}
 	return &re, nil
+}
+
+func (r *ReactionRepository) Create(re *models.Reaction) error {
+	return r.db.Create(&re).Error
 }
