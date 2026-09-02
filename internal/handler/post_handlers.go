@@ -60,3 +60,16 @@ func (h *PostHandler) Delete(c echo.Context) error {
 	}
 	return utils.JSON(c, http.StatusOK, true, "Post Deleted!", nil)
 }
+
+func (h *PostHandler) UpdatePost(c echo.Context) error {
+	postID := c.Param("id")
+	var req CreatePostReq
+	if err := c.Bind(&req); err != nil {
+		return utils.Err(c, http.StatusBadRequest, "Invalid Request!")
+	}
+	updatedPost, err := h.Service.Update(postID, req.Title, req.Content, req.Tags)
+	if err != nil {
+		return utils.Err(c, http.StatusInternalServerError, err.Error())
+	}
+	return utils.JSON(c, http.StatusOK, true, "Post Updatted!", updatedPost)
+}
