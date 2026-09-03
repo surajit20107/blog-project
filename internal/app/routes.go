@@ -40,7 +40,6 @@ func RegisterRoutes(e *echo.Echo, db *gorm.DB, cfg *config.Config) {
 	e.GET("/api/v1/posts", postHandler.GetAllPosts)          // Get All Posts
 	e.GET("/api/v1/posts/:id", postHandler.GetPostById)      // Get Post By ID
 	e.GET("/api/v1/posts/:id/comments", commentHandler.List) // Get Comments By Post ID
-	e.PUT("/api/v1/posts/:id", postHandler.UpdatePost)       // Update Post
 
 	// Get All Tags
 	e.GET("/api/v1/tags", func(c echo.Context) error {
@@ -54,6 +53,7 @@ func RegisterRoutes(e *echo.Echo, db *gorm.DB, cfg *config.Config) {
 	g := e.Group("/api/v1")
 	g.Use(JWTMiddleware(cfg))
 	g.POST("/posts", postHandler.CreatePost)                 // Create Post
+	g.PUT("/posts/:id", postHandler.UpdatePost)              // Update Post
 	g.DELETE("/posts/:id", postHandler.Delete)               // Delete Post
 	g.POST("/posts/:id/comments", commentHandler.AddComment) // Add Comment
 	g.POST("/posts/:id/reactions", reactionHandler.Toggle)   // Toggle Reaction
