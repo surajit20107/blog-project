@@ -11,12 +11,17 @@ import (
 )
 
 func Connect(cfg *config.Config) (*gorm.DB, error) {
-	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable", cfg.DBHost, cfg.DBUser, cfg.DBPassword, cfg.DBName, cfg.DBPort)
+	dsn := cfg.DATABASE_URL
 
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		return nil, fmt.Errorf("failed to connect database: %w", err)
 	}
+
+	// err = db.Exec("CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\"").Error
+	// if err != nil {
+	// 	return nil, fmt.Errorf("failed to create uuid-ossp extension: %w", err)
+	// }
 
 	err = db.AutoMigrate(
 		&models.Comment{},
