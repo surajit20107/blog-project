@@ -115,7 +115,7 @@ JWT_SECRET="your-super-secret-key"
 ### 3. Install dependencies
 
 ```bash
-go mod download
+go mod tidy
 ```
 
 ### 4. Run the server

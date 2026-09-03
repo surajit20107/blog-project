@@ -54,7 +54,7 @@ This project adheres to the [Contributor Covenant Code of Conduct](CODE_OF_CONDU
 5. **Install dependencies**
 
    ```bash
-   go mod download
+   go mod tidy
    ```
 
 6. **Run the server**
